@@ -3,8 +3,10 @@ CS-Ctrl
 Aurelia UI controls (Work in progress)
 
 
-Getting Started
+Installation
 -------------
+
+> **Run:**
 
 From the command line enter:
 > - npm install
@@ -12,3 +14,10 @@ From the command line enter:
 > - gulp watch
 
 Application should now be viewable in browser at http://localhost:9000
+
+
+Demo
+-------------
+[Demo][DemoLink]
+
+[DemoLink]: http://csaloio.github.io/cs-ctrl/
