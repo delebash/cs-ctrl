@@ -1,0 +1,78 @@
+//Date control
+//--------------------------------------------------------
+.cs-date
+{
+    overflow:hidden;
+    width:250px; height:24px;
+
+    position:relative;
+    display:flex;
+
+    border:solid 1px #C8C8C8;  border-radius:2px;outline:none;
+
+    box-shadow:0 0 5px rgba(0,0,0,0), 0 0 3px rgba(0,0,0,.2) inset;
+    background:#FFF;
+
+    &.cs-focused  {border-color:#6D97C7 !important; box-shadow:0 0 3px rgba(255,255,255,1), 0 0 6px rgba(0,0,0,.22) inset; color:#707070;}
+    &.cs-disabled {background:transparent; opacity:.5; pointer-events: none;}
+
+    cursor:default;
+}
+.cs-date:not(.cs-disabled):hover {border-color:#929CA6; box-shadow:0 0 3px rgba(255,255,255,1), 0 0 6px rgba(0,0,0,.22) inset; }
+
+//Textbox
+//--------------------------------------------------------
+.cs-date-input
+{
+    box-sizing: border-box;
+    background:transparent !important; border:none !important; box-shadow:none !important; outline:none !important;
+    width: 40px !important;
+    flex:1 !important;
+    height:24px !important; vertical-align: top; padding-left: 4px;
+    font: 12px/12px Arial; color:#777;
+    min-width: 0 !important;
+}
+.cs-date:hover   .cs-date-input { color:#444; }
+.cs-date.focused .cs-date-input { color:#444; }
+
+
+//Show calendar button
+//--------------------------------------------------------
+.cs-date-btn
+{
+    box-sizing: border-box;
+    width:40px; height:22px;
+    background: linear-gradient(#eee 0, #eee 40%, #CDCDCD 100%);
+    border-left: solid 1px #aaa;
+}
+.cs-date-btn:not(.disabled):hover  { background: linear-gradient(#E6EEF6 0, #E0E9F4 40%, #B8CDE4 100%); border-color:#72B6ED; box-shadow:0 0 5px rgba(0,0,0,0), 0 0 3px rgba(0,0,0,.2);}
+.cs-date-btn:not(.disabled):active { box-shadow: 0 0 5px rgba(0,0,0,.2) inset; border-color:#5DAEF3;}
+
+//Show calendar button calendar icon
+//--------------------------------------------------------
+.cs-date-btn-ico
+{
+    display:block; box-sizing: border-box;
+    width:16px; height:16px;
+    background: linear-gradient(rgba(245,245,245,1), rgba(228,228,228,1));
+
+    background:#FFF;
+    border-radius: 2px;
+    box-shadow: 0 2px 2px rgba(0,0,0,.45);
+
+    font: 400 9px/12px Verdana; color:333;
+    text-align: center;
+    margin: 2px auto;
+}
+.cs-date-btn-ico::before  //Calendar header area
+{
+    content:'';
+    display: block;
+    height:4px;
+
+    background: linear-gradient(rgba(228,167,167,1), rgba(168,52,54,1));
+    border-bottom: 1px solid #772524;
+    border-radius: 2px 2px 0 0;
+    box-shadow: -1px 4px 6px rgba(0,0,0,.3);
+}
+.cs-date-btn:active .cs-date-btn-ico { position: relative; top:1px;  }

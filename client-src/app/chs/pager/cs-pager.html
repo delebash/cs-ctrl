@@ -1,0 +1,9 @@
+﻿<template class="cs-ctrl cs-pager">
+    <div if.bind="visible" click.delegate="onClick($event)">
+        <div if.bind="endLinks" data-pg="1" class="cs-pager-link ${noPrevious ? 'cs-disabled' : ''}">First</div>
+        <div if.bind="nextLinks" data-pg="${prevPgNum}" class="cs-pager-link ${noPrevious ? 'cs-disabled' : ''}">Prev</div>
+        <div repeat.for="p of pageLinks" data-pg="${p.number}" class="cs-pager-link ${p.active ? 'cs-active' : ''}">${p.text}</div>
+        <div if.bind="nextLinks" data-pg="${nextPgNum}" class="cs-pager-link ${noNext ? 'cs-disabled' : ''}">Next</div>
+        <div if.bind="endLinks" data-pg="${totalPages}" class="cs-pager-link ${noNext ? 'cs-disabled' : ''}">Last</div>
+    </div>
+</template>

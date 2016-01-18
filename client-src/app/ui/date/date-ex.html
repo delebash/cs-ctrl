@@ -1,0 +1,14 @@
+<template>
+    <div class="pad25">
+        
+    	<div style="margin:25px">
+    		<label>Enter a date:</label>
+    		<cs-date value.bind="selectedDt"></cs-date>    		
+			<p class="side">You selected: <span style="color:#0C0;font-weight:800;">${selectedDt}</span></p>
+    	</div>
+    	
+        <button click.delegate="setDateToToday()">Set date to today</button>
+        <button click.delegate="setDateToXMas()">Set date to Christmas</button>
+            
+	</div>
+</template>

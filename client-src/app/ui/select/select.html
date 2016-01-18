@@ -1,0 +1,24 @@
+<template>
+	<div class="pad25">
+        
+    	<div style="margin:25px">
+    		<label>Choose your favorite fruit:</label>
+    		<cs-select src.bind="fruits" value.bind="selectedFruit"></cs-select>    		
+			<p class="side">Your favorite fruit is: <span style="color:#0C0;font-weight:800;">${selectedFruit.text}</span></p>
+    	</div>
+    	
+    	<div style="margin:25px">
+    		<label>Choose a person:</label>
+    		<cs-select src.bind="people" value.bind="selectedPerson" render-item-fn.bind="renderPersonItem" render-result-fn.bind="renderPersonResult" required></cs-select>
+    		<p class="side">You chose: <span style="font-weight:800;">${selectedPerson.text}</span></p>
+    	</div>
+        
+        <div style="margin:25px">
+    		<label>Choose a person (scalar):</label>
+    		<cs-select src.bind="people" value.bind="selectedPersonID" scalar></cs-select>
+    		<p class="side">You chose: <span style="font-weight:800;">${selectedPersonID}</span></p>
+    	</div>
+        <button click.delegate="setValueOne()">Set ID=1</button>
+        
+	</div>
+</template>
