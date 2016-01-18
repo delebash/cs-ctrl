@@ -5,9 +5,6 @@ Aurelia UI controls (Work in progress)
 
 Installation
 -------------
-
-> **Run:**
-
 From the command line enter:
 > - npm install
 > - jspm install
