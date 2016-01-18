@@ -1,6 +1,0 @@
-<template class="cs-ctrl cs-date">
-    <input class="cs-date-input" value.bind="inputValue" input.delegate="onInput()" focus.trigger="onFocus()" blur.trigger="onBlur()" maxlength="10" disabled.bind="disabled" ref="inputEl"/>
-    <div class="cs-date-btn ${disabled ? 'disabled' : ''}" click.delegate="showCalendar()">
-        <div class="cs-date-btn-ico">${dateNum}</div>
-    </div>
-</template>

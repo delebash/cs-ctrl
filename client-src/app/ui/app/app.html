@@ -1,8 +1,0 @@
-<template>
-    <nav id="app-nav" class="cs-noselect">   
-        <a repeat.for="r of router.navigation" class="${r.isActive ? 'act' : ''}" href.bind="r.href">${r.title}</a>
-    </nav>
-    
-    <router-view id="app-router"></router-view>
-    
-</template>
