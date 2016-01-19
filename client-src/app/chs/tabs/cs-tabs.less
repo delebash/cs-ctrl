@@ -1,0 +1,53 @@
+//The tab control
+.cs-tabs
+{
+    display: block;
+}
+
+
+//The <ul> of tab headers a user would click on
+.cs-tabs-hdr
+{
+    list-style: none;
+    padding: 0 0 0 15px; margin:0;
+    overflow: hidden;
+
+    position: relative;
+    border-bottom: solid 1px #aaa;
+    background: transparent;
+    user-select:none;
+}
+
+
+//A tab header <li>
+.cs-tabs-hdr-tab
+{
+    text-align: center;
+    font: 12px/25px arial; color:#999;
+    border: 1px solid transparent;
+    display: inline-block;
+    position: relative; top:1px;
+    padding: 0 20px;
+    cursor: pointer;
+
+    &:hover { color: #9E47F7;}
+
+    &.cs-active
+    {
+        border: 1px solid #AAA;
+        background: #FFF;
+        color: #444;
+        box-shadow: 0 0 3px rgba(0, 0, 0, .1);
+    }
+}
+
+
+//Tab content
+.cs-tab
+{
+        display:none;
+        &.cs-active
+        {
+            display:block;
+        }
+}

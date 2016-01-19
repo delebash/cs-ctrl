@@ -11,6 +11,7 @@ export class App
             { route: 'select',     name: 'select',   moduleId: '../select/select',   nav:true, title: 'Select'},
             { route: 'mselect',    name: 'mselect',  moduleId: '../mselect/mselect',   nav:true, title: 'Multi-Select'},
             { route: 'win',        name: 'win',      moduleId: '../win/win',   nav:true, title: 'Windows'},
+            { route: 'tabs',       name: 'tabs',      moduleId: '../tabs/tabs',   nav:true, title: 'Tabs'},
         ]);
         
         this.router = router;

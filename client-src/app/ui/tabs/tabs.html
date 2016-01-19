@@ -1,0 +1,22 @@
+<template>
+
+    <div style="margin-bottom:25px; border-spacing:0;">
+        Bound value: <input value.bind="myValue"/>
+        <button click.trigger="addTab()">Add tab</button>
+        <button click.trigger="removeTab()">Remove tab</button>
+    </div>
+
+    <cs-tabs>
+        <cs-tab title="Static Tab">
+            <p>I'm a static tab...</p>
+            <p>Here's a bound value: <b>${myValue}</b></p>
+        </cs-tab>
+
+        <cs-tab title="Dynamic Tab ${$index+1}" repeat.for="t of tabs">
+            <p>Hi!</p>
+
+            <p>I'm dynamically generated tab <b>${$index+1}</b>...</p>
+        </cs-tab>
+    </cs-tabs>
+
+</template>

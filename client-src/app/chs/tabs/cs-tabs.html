@@ -1,0 +1,9 @@
+<template class="cs-ctrl cs-tabs">
+    <ul class="cs-tabs-hdr">
+        <li repeat.for="t of tabs" class="cs-tabs-hdr-tab ${t==$parent.activeTab ? 'cs-active' : ''}" click.delegate="$parent.selectTab(t)">
+            ${t.title}
+        </li>
+    </ul>
+
+    <content select="cs-tab"></content>
+</template>
