@@ -75,7 +75,7 @@ export class CalendarPopup
 
             if(cl.contains(CellContentCSS))                                //Calendar day cell
             {
-                self.curCtrl.value = new Date(self.lastDt.getFullYear(), self.lastDt.getMonth(), ev.target.innerText);
+                self.curCtrl.value = new Date(self.lastDt.getFullYear(), self.lastDt.getMonth(), ev.target.textContent);
                 self.hide();
                 self.curCtrl.focus();
             }
