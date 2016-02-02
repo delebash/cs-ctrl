@@ -3,6 +3,7 @@ System.config({
   defaultJSExtensions: true,
   transpiler: "none",
   paths: {
+    "all.js": "cs-ctrl/all.js"
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
