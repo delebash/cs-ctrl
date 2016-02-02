@@ -30,7 +30,15 @@ gulp.task('bundle:aurelia', function (done)
         jspm.bundle(aureliaFiles, outFile, {inject:true,sourceMaps:false,minify:true,mangle:true}).then(function()
         {
             done();
-        });    
+        })
+        .catch(function(err)
+        {
+            console.log(err);
+        });
+    })
+    .catch(function(err)
+    {
+        console.log(err);
     });
 });
 
@@ -45,9 +53,15 @@ gulp.task('bundle:app', function (done)
   jspm.bundle(cmd, outFile, {inject:true,sourceMaps:false,minify:true,mangle:true}).then(function()
   {
       done();
+  })
+  .catch(function(err)
+  {
+      console.log(err);
   });
-
 });
+
+
+
 
 
 //Bundle all files
@@ -65,7 +79,9 @@ gulp.task('bundle:all', function (done)
         {
             done();
         });
+    })
+    .catch(function(err)
+    {
+        console.log(err);
     });
 });
-
-

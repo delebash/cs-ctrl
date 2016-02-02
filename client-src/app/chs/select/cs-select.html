@@ -1,5 +1,9 @@
-﻿<template class="cs-ctrl cs-select">
-    <div class="cs-select-content"></div>
+﻿<template class="cs-ctrl cs-select" click.delegate="onClick($event)" mousedown.delegate="onMousedown($event)" keydown.delegate="onKeydown($event)" focus.trigger="onFocus()" blur.trigger="onBlur()">
+    <div class="cs-select-content">
+        <template replaceable part="item-template">
+            ${item[textProp]}
+        </template>
+    </div>
     <div class="cs-select-arrow-wrap"><div class="cs-select-arrow"></div></div>
-    <div class="cs-select-clear" show.bind="!required">x</div>        
+    <div class="cs-select-clear" show.bind="!required">x</div>
 </template>

@@ -1,0 +1,30 @@
+<template class="cs-ctrl cs-grid">
+
+    <content></content>
+    
+    <div class="cs-grid-wrap">
+        <div class="cs-grid-hdr" ref="headerRowEl">
+            <div repeat.for="c of columns" class="${c.allClass} cs-grid-hcell"  click.delegate="$parent.onHeaderClick($event, $index)">${c.header}</div>
+            <div class="cs-grid-cell-scroll"></div>
+        </div>
+
+        <div class="cs-grid-body">
+
+            <div class="busyline cs-grid-busy ${isBusy ? 'cs-active' : ''}">
+                <div class="busyLine1"></div>
+                <div class="busyLine2"></div>
+                <div class="busyLine3"></div>
+            </div>
+
+            <div repeat.for="i of rows" class="cs-grid-row" class="cs-grid-row" click.delegate="$parent.onRowClick($event, i)">
+                <!--<content></content>-->
+            </div>
+        </div>
+
+        <div class="cs-grid-foot">
+            <cs-pager class="cs-pager-grid" pg-size.bind="pgSize" total.bind="totalCount" pg-num.bind="pgNum" ondemand></cs-pager>
+            <div class="cs-grid-total">${totalMsg}</div>
+        </div>
+    </div>
+
+</template>

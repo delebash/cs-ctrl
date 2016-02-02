@@ -3,7 +3,11 @@
         
     	<div style="margin:25px">
     		<label>Select some people:</label>
-    		<cs-mselect src.bind="people" values.bind="selectedPeople"></cs-mselect>
+    		<cs-mselect src.bind="people" values.bind="selectedPeople">
+                <template replace-part="item-template">
+                    <span css="color:${item.sex=='m' ? 'blue' : '#FF00FF'}">${item.text}</span>
+                </template>
+            </cs-mselect>
 			<p>You've selected:</p>
             <ul>
                 <li repeat.for="p of selectedPeople">${p.text}</li>

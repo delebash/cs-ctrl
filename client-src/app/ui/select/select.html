@@ -9,13 +9,21 @@
     	
     	<div style="margin:25px">
     		<label>Choose a person:</label>
-    		<cs-select src.bind="people" value.bind="selectedPerson" render-item-fn.bind="renderPersonItem" render-result-fn.bind="renderPersonResult" required></cs-select>
+    		<cs-select src.bind="people" value.bind="selectedPerson" required>
+                <template replace-part="item-template">
+                    <span css="color:${item.sex=='m' ? 'blue' : '#FF00FF'}">${item.text}</span>
+                </template>
+            </cs-select>
     		<p class="side">You chose: <span style="font-weight:800;">${selectedPerson.text}</span></p>
     	</div>
         
         <div style="margin:25px">
     		<label>Choose a person (scalar):</label>
-    		<cs-select src.bind="people" value.bind="selectedPersonID" scalar></cs-select>
+    		<cs-select src.bind="people" value.bind="selectedPersonID" scalar>
+                <template replace-part="item-template">
+                    <span css="color:${item.sex=='m' ? 'blue' : '#FF00FF'}">${item.text}</span>
+                </template>
+            </cs-select>
     		<p class="side">You chose: <span style="font-weight:800;">${selectedPersonID}</span></p>
     	</div>
         <button click.delegate="setValueOne()">Set ID=1</button>

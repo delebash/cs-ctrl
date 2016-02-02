@@ -1,7 +1,5 @@
 import {customElement, bindable, children} from 'aurelia-framework';
 
-//'tabs', 'tabsChanged', 'cs-tab'
-
 @customElement('cs-tabs')
 @children({name:'tabs', selector: 'cs-tab'}) //Creates [] property whose items are synced based on a query selector against the element's immediate child content.
 export class CsTabs
@@ -12,7 +10,6 @@ export class CsTabs
         this.element   = element;
         this.activeTab = null;
     }
-
 
     //Binding event handlers
     //--------------------------------------------------------

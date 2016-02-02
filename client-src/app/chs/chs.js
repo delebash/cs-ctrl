@@ -207,64 +207,91 @@ export function isHidden(el)
 }
 
 
-// //------------Element Resize Detection-------------------
-// export function addResizeListener(el, fn)
-// {
-//     if (!el._CHS_resizeHandlers)      //If there are no resize event handlers on this element yet...
-//     {
-//         el._CHS_resizeHandlers = [];  //Add an array to the element to hold handler functions
+//------------Element Resize Detection-------------------
+export function addResizeListener(el, fn)
+{
+    if (!el._CHS_resizeHandlers)      //If there are no resize event handlers on this element yet...
+    {
+        el._CHS_resizeHandlers = [];  //Add an array to the element to hold handler functions
 
-//         //The element's position can't be static because we're going to absolotely position an <object> inside it to fill its space
-//         if (getComputedStyle(el).position == 'static') { el.style.position = 'relative'; }
+        //The element's position can't be static because we're going to absolutely position an <object> inside it to fill its space
+        if (getComputedStyle(el).position == 'static') { el.style.position = 'relative'; }
 
-//         //Create an unclickable <object> inside the element taking all space
-//         var obj = el._CHS_resizeObj = document.createElement('object');
-//         obj.setAttribute('style', 'display:block;position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:-1;');
-//         obj.onload = function()
-//         {
-//             this.contentDocument.defaultView._CHS_resizeOrigEl = el;
-//             this.contentDocument.defaultView.addEventListener('resize', resizeListener);
-//         };
-//         obj.type = 'text/html';
-//         obj.data = 'about:blank';
-//         el.appendChild(obj);
-//     }
-//     el._CHS_resizeHandlers.push(fn);  //Add fn to list of functions to call when the element is resized
-// }
+        //Create an unclickable <object> inside the element taking all space
+        var obj = el._CHS_resizeObj = document.createElement('object');
+        obj.setAttribute('style', 'display:block;position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:-1;');
+        obj.onload = function()
+        {
+            this.contentDocument.defaultView._CHS_resizeOrigEl = el;
+            this.contentDocument.defaultView.addEventListener('resize', resizeListener);
+        };
+        obj.type = 'text/html';
+        obj.data = 'about:blank';
+        el.appendChild(obj);
+    }
+    el._CHS_resizeHandlers.push(fn);  //Add fn to list of functions to call when the element is resized
+}
 
-// function resizeListener(e)
-// {
-//     var obj = e.target;
-//     if (obj._CHS_frameID) { window.cancelAnimationFrame(obj._CHS_frameID); }  //Cancel any previous requestedFrame
+function resizeListener(e)
+{
+    var obj = e.target;
+    if (obj._CHS_frameID) { cancelAnimationFrame(obj._CHS_frameID); }  //Cancel any previous requestedFrame
 
-//     //Request to be called back before the next repaint.
-//     obj._CHS_frameID = window.requestAnimationFrame(function()
-//     {
-//         var origEl = obj._CHS_resizeOrigEl;
-//         origEl._CHS_resizeHandlers.forEach(function(fn)
-//         {
-//             fn.call(origEl, e);  //Call each of the event handler functions about the resize (with *this* being the original element)
-//         });
-//         obj._CHS_frameID = null;
-//     });
-// }
+    //Request to be called back before the next repaint.
+    obj._CHS_frameID = window.requestAnimationFrame(function()
+    {
+        var origEl = obj._CHS_resizeOrigEl;
+        origEl._CHS_resizeHandlers.forEach(function(fn)
+        {
+            fn.call(origEl, e);  //Call each of the event handler functions about the resize (with *this* being the original element)
+        });
+        obj._CHS_frameID = null;
+    });
+}
 
-// export function removeResizeListener(el, fn)
-// {
-//     el._CHS_resizeHandlers.splice(el._CHS_resizeHandlers.indexOf(fn), 1);  //Remove the fn from the list of handlers
-//     if (!el._CHS_resizeHandlers.length)                                    //If there's no more resizeHandlers left
-//     {
-//         if(el._CHS_resizeObj.contentDocument)                              //When done in aurelia detached the object's contentDocument is no longer available :(
-//         {
-//             el._CHS_resizeObj.contentDocument.defaultView.removeEventListener('resize', resizeListener);  //Remove the event from the object
-//         }
-//         el.removeChild(el._CHS_resizeObj);                                                            //Remove the object from the element
-//         delete el._CHS_resizeObj;                                                                     //Remove obj reference
-//         delete el._CHS_resizeHandlers;                                                                //Remove handlers array
-//     }
-// }
-// //-----------------------------------------------------
+export function removeResizeListener(el, fn)
+{
+    el._CHS_resizeHandlers.splice(el._CHS_resizeHandlers.indexOf(fn), 1);  //Remove the fn from the list of handlers
+    if (!el._CHS_resizeHandlers.length)                                    //If there's no more resizeHandlers left
+    {
+        if(el._CHS_resizeObj.contentDocument)                              //When done in aurelia detached() the object's contentDocument is no longer available :(
+        {
+            el._CHS_resizeObj.contentDocument.defaultView.removeEventListener('resize', resizeListener);  //Remove the event from the object
+        }
+        el.removeChild(el._CHS_resizeObj);                                                            //Remove the object from the element
+        delete el._CHS_resizeObj;                                                                     //Remove obj reference
+        delete el._CHS_resizeHandlers;                                                                //Remove handlers array
+    }
+}
+//-----------------------------------------------------
 
+
+export var scrollbarWidth = (function()
+{
+    var outer = document.createElement('div');
+    outer.style.visibility = 'hidden';
+    outer.style.width = '100px';
+    outer.style.msOverflowStyle = 'scrollbar'; //Needed for WinJS apps
+
+    document.body.appendChild(outer);
+
+    var widthNoScroll = outer.offsetWidth;
+
+    //Force scrollbars
+    outer.style.overflow = 'scroll';
+
+    //Add innerdiv
+    var inner = document.createElement('div');
+    inner.style.width = '100%';
+    outer.appendChild(inner);
+
+    var widthWithScroll = inner.offsetWidth;
+
+    //Remove divs
+    outer.parentNode.removeChild(outer);
+
+    return (widthNoScroll - widthWithScroll);
+})();
 
 
 
@@ -336,36 +363,6 @@ export function extend(out)
 
 
 
-// var _scrollBarWidth = null;
-// export function getScrollbarWidth()
-// {
-//     if(_scrollBarWidth) { return _scrollBarWidth; }
-
-//     var outer = document.createElement("div");
-//     outer.style.visibility = "hidden";
-//     outer.style.width = "100px";
-//     outer.style.msOverflowStyle = "scrollbar"; //Needed for WinJS apps
-
-//     document.body.appendChild(outer);
-
-//     var widthNoScroll = outer.offsetWidth;
-
-//     //Force scrollbars
-//     outer.style.overflow = "scroll";
-
-//     //Add innerdiv
-//     var inner = document.createElement("div");
-//     inner.style.width = "100%";
-//     outer.appendChild(inner);
-
-//     var widthWithScroll = inner.offsetWidth;
-
-//     //Remove divs
-//     outer.parentNode.removeChild(outer);
-
-//     _scrollBarWidth = (widthNoScroll - widthWithScroll);
-//     return _scrollBarWidth;
-// }
 
 
 // var chsIDCount = 0;  //Counter of the chsIDs that have been issued so far.

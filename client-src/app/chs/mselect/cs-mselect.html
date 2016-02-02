@@ -1,3 +1,10 @@
-﻿<template class="cs-ctrl cs-mselect">
-    <ul class="cs-mselect-items"></ul>
+﻿<template class="cs-ctrl cs-mselect" click.delegate="onClick($event)" mousedown.delegate="onMousedown($event)" keydown.delegate="onKeydown($event)" focus.trigger="onFocus()" blur.trigger="onBlur()">
+    <ul class="cs-mselect-items">
+        <li repeat.for="item of values" class="cs-mselect-item" data-id="${item[idProp]}">
+            <div class="cs-mselect-item-content">
+                <template replaceable part="item-template">${item[textProp]}</template>
+            </div>
+            <div class="cs-mselect-item-x">x</div>
+        </li>
+    </ul>
 </template>

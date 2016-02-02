@@ -17,6 +17,10 @@
 
             <p>I'm dynamically generated tab <b>${$index+1}</b>...</p>
         </cs-tab>
+        
+        <template replace-part="tab-template">
+            ${t.title}
+        </template>
     </cs-tabs>
 
 </template>

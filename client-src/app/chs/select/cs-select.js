@@ -6,12 +6,11 @@ import {DDL} from '../ddl/ddl';
 
 export class CsSelect
 {
-    @bindable({defaultBindingMode: bindingMode.twoWay}) value = null;   //Selected value object
+    @bindable({defaultBindingMode: bindingMode.twoWay}) value = null;   //Selected value object or id (depending on if scalar set) 
     @bindable src            = null;   //Item source for results
     @bindable disabled       = false;  //Is the control disabled?
-    @bindable renderItemFn   = null;   //Custom function for rendering item content.   Ex: renderItem(obj, id, txt)
     @bindable renderResultFn = null;   //Custom function for rendering result content. Ex: renderResult(ddl, ctrl, obj, highlightedMarkup)
-
+  
     static inject = [Element, DDL];
     constructor(el, ddl)
     {
@@ -57,39 +56,19 @@ export class CsSelect
             self.minChars = Number(el.getAttribute('min-chars')) || 2;
         }
 
-        //Bind events
-        self.clickHandler     = e => self.onClick(e);
-        self.mousedownHandler = e => self.onMousedown(e);
-        self.focusHandler     = e => self.onFocus(e);
-        self.blurHandler      = e => self.onBlur(e);
-        self.keydownHandler   = e => self.onKeyDown(e);
-
-        el.addEventListener('click',     self.clickHandler);
-        el.addEventListener('mousedown', self.mousedownHandler);
-        el.addEventListener('focus',     self.focusHandler);
-        el.addEventListener('blur',      self.blurHandler);
-        el.addEventListener('keydown',   self.keydownHandler);
+       
 
         self.valueChanged(self.value);
     }
-    unbind()   //Called when the databinding engine unbinds the view
-    {
-        var el = this.element;
-        el.removeEventListener('click',     self.clickHandler);
-        el.removeEventListener('mousedown', self.mousedownHandler);
-        el.removeEventListener('focus',     self.focusHandler);
-        el.removeEventListener('blur',      self.blurHandler);
-        el.removeEventListener('keydown',   self.keydownHandler);
-    }
+   
 
 
     //Binding change handlers
     //-------------------------------------------------------------------------------------------------------------------------------------------
     valueChanged(newVal)
     {
-        if(this.isObj)  { this.selectedItem = newVal; }
-        if(!newVal)     { this.selectedItem = null;   }
-        this.renderContent();
+        if(this.dontUpdateItem) { this.dontUpdateItem = false; return; }  //Skip update of item this time
+        this.updateItem();
     }
     
     disabledChanged(newVal)
@@ -108,6 +87,27 @@ export class CsSelect
         }
     }
 
+    //Actions
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+    clear()
+    {
+        this.value = null;
+    }
+
+    setOpenState(b)  //Called by ddl
+    {
+        this.isOpen = b;
+
+        if(b) { this.element.classList.add('open'); }
+        else  { this.element.classList.remove('open'); }
+    }
+
+    addSelectedItem(o)  //Called (usually by ddl) when a new item is selected
+    {
+        this.item = o;
+        this.dontUpdateItem = true;                //Because we already have it correct, don't update it in valueChanged
+        this.value = this.isObj ? o : o[this.idProp];
+    }
     
 
 
@@ -148,71 +148,39 @@ export class CsSelect
         this.element.classList.remove('focused');
     }
 
-    onKeyDown(e)
+    onKeydown(e)
     {
-        if (this.disabled) { return; }
+        if (this.disabled) { return true; }
 
         if (e.keyCode === 38 || e.keyCode === 40 || isAlphaNumericKey(e.keyCode))  //Up, Down, or alphanumeric key
         {
             this.ddl.open(this);
         }
+        return true;  //Necessary or tabbing won't work. (Something Aurelia is doing I think)
     }
 
 
-
-
-
-    //Actions
-    //-------------------------------------------------------------------------------------------------------------------------------------------
-    clear()
+    updateItem()
     {
-        this.value = null;
-    }
-
-    setOpenState(b)  //Called by ddl
-    {
-        this.isOpen = b;
-
-        if(b) { this.element.classList.add('open'); }
-        else  { this.element.classList.remove('open'); }
-    }
-
-    addSelectedItem(o)  //Called (usually by ddl) when a new item is selected
-    {
-        this.selectedItem = o;
-        this.value = this.isObj ? o : o[this.idProp];
-    }
-
-    renderContent()
-    {
-        var markup, self = this, obj = self.value, id, txt, src = self.src;
-
-        if(obj || obj === 0)
+        var self = this, v = self.value, id, src = self.src, i = 0;
+        
+        self.item = null;
+        
+        if(self.isObj)
         {
-            id = (self.isObj) ? obj[self.idProp] : obj;
+            self.item = v;
+        }
+        else if(v || v === 0)
+        {
+            id = v;
             
-            if(self.selectedItem) //If we have a selectedItem we can grab the text from
+            if(Array.isArray(src))                  //If src is an [] try and look up the item from there
             {
-                txt = self.selectedItem[self.textProp];
-                self.selectedItem = null;
-            }
-            else                  //Else if src is an [] try and look up the item's text from there
-            {
-                for(var i = 0; i < src.length; i++)
+                for(; i < src.length; i++)
                 {
-                    if(src[i][self.idProp] == id) { txt = src[i][self.textProp]; break; }
+                    if(src[i][self.idProp] == id) { self.item = src[i]; break; }
                 }
             }
         }
-
-        if(self.renderItemFn)   //If a custom item render() supplied call it to generate the markup to render
-        {
-            markup = self.renderItemFn(obj, id, txt);
-        }
-        else                    //Use default rendering (display selected item's "text")
-        {
-            markup = txt ? encodeHtml(txt) : '';
-        }
-        self.contentEl.innerHTML = markup;
     }
 }

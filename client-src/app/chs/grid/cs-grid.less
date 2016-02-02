@@ -1,0 +1,194 @@
+@RowHeight: 27px;
+@footerHeight: 25px;
+
+//The grid control
+.cs-grid
+{
+    width:500px; height:200px;
+
+    display:inline-block;
+
+    font: 13px "Times New Roman",Arial;
+    border:solid 1px #CDCDCD;
+    box-shadow:0 0 5px 1px rgba(0,0,0,.1);
+    cursor:default;
+}
+
+
+
+//Div inside the grid that wraps (header, body, footer)
+.cs-grid-wrap
+{
+    height:100%;
+    display:flex;
+    flex-direction: column;
+}
+
+
+//Header
+.cs-grid-hdr
+{
+    display: flex;
+    background: linear-gradient(#FFF, #E6E6E6);
+
+    box-sizing: border-box;
+    height:@RowHeight;
+
+    box-shadow: 0 4px 7px -2px rgba(0,0,0,.2); z-index: 1;
+}
+
+
+//The main table body
+.cs-grid-body
+{
+    background: #F8F8F8;
+
+    flex: 1;  //grow, shrink, basis
+    overflow: auto;
+
+    box-shadow:// inset 0  4px 7px -4px rgba(0,0,0,.5),
+                inset 0 -4px 7px -4px rgba(0,0,0,.2);
+}
+
+
+//Grid's footer
+.cs-grid-foot
+{
+    background:linear-gradient(#FAFAFA, #EEE);
+    height:@footerHeight;
+    box-sizing: border-box;
+    border-top:solid 1px #CCC;
+
+    box-shadow:0 2px 3px rgba(0,0,0,.13);
+}
+
+//Total result count in footer
+.cs-grid-total
+{
+    line-height:@footerHeight; float:right; color:#777; margin-right:13px;
+    font:Arial;
+    text-shadow: 0px 1px 0px rgba(255,255,255, 1);
+}
+
+
+
+//Body row
+.cs-grid-row
+{
+    box-sizing: border-box;
+    height:@RowHeight;
+    display: flex;
+    background:rgba(255,255,255,.4);
+
+    border-top:solid 1px #DDD;
+
+    &.cs-first {border:none;}
+    &.cs-last  {border-bottom:solid 1px #DDD;}
+    &:hover
+    {
+        background:rgba(0,0,0,.03);
+        .cs-grid-cell { color:#111; }
+    }
+
+    &.cs-active
+    {
+        background: #EDE8F8; border-color:#D1BBFF;
+        &+ .cs-grid-row { border-color:#D1BBFF; }            //Set border color of next sibling row
+        .cs-grid-cell { color:#4105D9; border-color:#D1BBFF;}
+    }
+}
+
+
+//Cells for body & header
+.cs-grid-cell,.cs-grid-hcell
+{
+    position:relative;
+    line-height:@RowHeight;
+
+    overflow: hidden; text-overflow: ellipsis; white-space:nowrap;
+    padding: 0 5px;
+    box-sizing: border-box;
+}
+
+.cs-grid-hcell
+{
+    border-right:solid 1px #CCC;
+    border-bottom:solid 1px #BBB;
+    color:#777;
+}
+.cs-grid-cell
+{
+    border-right:solid 1px #DDD;
+    //border-bottom:solid 1px #DDD;
+    flex: 1;
+    color:#999;
+}
+
+//Header cell that's over the scrollbar
+.cs-grid-cell-scroll
+{
+    border-bottom:solid 1px #BBB;
+}
+
+//Sortable header cells
+.cs-grid-hcell.cs-sort
+{
+    cursor:pointer;
+
+    &:hover, &:active
+    {
+        background: linear-gradient(#FCFBFF 0%, #E7E0FA 100%);
+        box-shadow:0 0 0 1px rgba(154, 127, 233, .8) inset;
+        color:#6A0BEB; text-shadow:0 1px 4px #fff;
+    }
+    &:active
+    {
+        box-shadow:0   0 7px  0px rgba(148, 35, 235, .3) inset,
+                   0   0 0    1px rgba(154, 127, 233, .5) inset;
+    }
+}
+
+
+//Sortable column header glyph (w/ no sort direction specified yet)
+.cs-grid-hcell.cs-sort::before
+{
+    content: ''; display:block; position:absolute; right:5px; top:10px;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 4px 6.9px 4px;
+    border-color: transparent transparent #CCC transparent;
+    pointer-events:none;
+    transform:rotate(0deg);
+    transition:all linear .2s;
+}
+
+//Ascending column header glyph
+.cs-grid-hcell.cs-sort.cs-asc::before
+{
+    border-color: transparent transparent #9423EB transparent;
+}
+
+//Descending column header glyph
+.cs-grid-hcell.cs-sort.cs-desc::before
+{
+    border-color: transparent transparent #9423EB transparent;
+    transform:rotate(180deg);
+}
+
+//Header cell style changes when sorting
+.cs-grid-hcell.cs-asc, .cs-grid-hcell.cs-desc
+{
+    color:#5100C0; text-shadow:0 1px 4px #fff;
+}
+
+
+
+//Busy animation inside grid body
+.cs-grid-busy
+{
+    opacity:0;
+    position: absolute; left:50%; top:50%; margin:-35px 0 0 -18px;
+    transition: opacity ease .3s;
+    pointer-events: none;
+}
+.cs-grid-busy.cs-active {opacity:1;}

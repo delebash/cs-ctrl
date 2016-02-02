@@ -5,7 +5,7 @@ var browserSync = require('browser-sync');
 //Outputs changes to files to the console
 function reportChange(event)
 {
-    console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+    console.log(event.path + ' - ' + event.type + ':');
 }
 
 

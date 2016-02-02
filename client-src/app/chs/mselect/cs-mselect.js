@@ -1,4 +1,4 @@
-﻿import {customElement, bindable, ObserverLocator} from 'aurelia-framework';
+﻿import {customElement, bindable} from 'aurelia-framework';
 import {DDL} from '../ddl/ddl';
 import {closest, encodeHtml, isAlphaNumericKey} from '../chs';
 
@@ -8,14 +8,12 @@ export class CsMselect
     @bindable src            = null;   //Item source for results
     @bindable values         = [];     //Array of selected objects
     @bindable disabled       = false;  //Is the control disabled?
-    @bindable renderItemFn   = null;   //Custom function for rendering item content.   Ex: renderItem(obj, id, txt)
     @bindable renderResultFn = null;   //Custom function for rendering result content. Ex: renderResult(ddl, ctrl, obj, highlightedMarkup)
 
-    static inject = [Element,DDL,ObserverLocator];
-    constructor(el, ddl, observerLocator)
+    static inject = [Element,DDL];
+    constructor(el, ddl)
     {
         var self = this;
-        self.observerLocator = observerLocator;
 
         //Set control properties
         self.element       = el;
@@ -61,39 +59,8 @@ export class CsMselect
             self.delay    = Number(el.getAttribute('delay'))     || 300;
             self.minChars = Number(el.getAttribute('min-chars')) || 2;
         }
-
-
-        //Bind events
-        self.clickHandler     = e => self.onClick(e);
-        self.mousedownHandler = e => self.onMousedown(e);
-        self.focusHandler     = e => self.onFocus(e);
-        self.blurHandler      = e => self.onBlur(e);
-        self.keydownHandler   = e => self.onKeyDown(e);
-
-        el.addEventListener('click',     self.clickHandler);
-        el.addEventListener('mousedown', self.mousedownHandler);
-        el.addEventListener('focus',     self.focusHandler);
-        el.addEventListener('blur',      self.blurHandler);
-        el.addEventListener('keydown',   self.keydownHandler);
-        
-        //Subscribe to changes to the values array
-        self.onValuesElementsChanges = () => self.valuesElementsChanged();
-        self.observerLocator.getArrayObserver(self.values).subscribe(self.onValuesElementsChanges);
-        
-        self.renderContent();
     }
-    unbind()   //Called when the databinding engine unbinds the view
-    {
-        var self = this, el = self.element;
-        el.removeEventListener('click',     self.clickHandler);
-        el.removeEventListener('mousedown', self.mousedownHandler);
-        el.removeEventListener('focus',     self.focusHandler);
-        el.removeEventListener('blur',      self.blurHandler);
-        el.removeEventListener('keydown',   self.keydownHandler);
-
-        //Dispose of ArrayObserver subscription
-        self.observerLocator.getArrayObserver(self.values).unsubscribe(self.onValuesElementsChanges);
-    }
+    
 
 
 
@@ -134,14 +101,15 @@ export class CsMselect
         this.element.classList.remove('focused');
     }
 
-    onKeyDown(e)
+    onKeydown(e)
     {
-        if (this.disabled) { return; }
+        if (this.disabled) { return true; }
 
         if (e.keyCode === 38 || e.keyCode === 40 || isAlphaNumericKey(e.keyCode))  //Up, Down, or alphanumeric key
         {
             this.ddl.open(this);
         }
+        return true;  //Necessary or tabbing won't work. (Something Aurelia is doing I think)
     }
 
 
@@ -165,29 +133,12 @@ export class CsMselect
         }
     }
 
-    valuesChanged(newVal, oldVal)                 //The values [] itself has been changed
-    {
-        var self = this;
-        
-        //Dispose of any previous ArrayObserver subscription & subscribe to changes of new array
-        self.observerLocator.getArrayObserver(oldVal).unsubscribe(self.onValuesElementsChanges);
-        self.observerLocator.getArrayObserver(newVal).subscribe(self.onValuesElementsChanges);
-        
-        self.renderContent();
-    }
-
-    valuesElementsChanged()                    //The contents of the values [] changed
-    {
-        this.renderContent();
-    }
-
 
     //Actions
     //-------------------------------------------------------------------------------------------------------------------------------------------
     clear()
     {
         this.values.length = 0;   //Clear array
-        this.renderContent();
     }
 
     setOpenState(b)  //Called by ddl
@@ -206,25 +157,4 @@ export class CsMselect
             this.values.push(o);
         }
     }
-
-    renderContent()
-    {
-        var self = this, markup = '';
-
-        for(var i = 0, ii = self.values.length; i < ii; i++)
-        {
-            markup += getItemMarkup(self, self.values[i]);
-        }
-        self.contentEl.innerHTML = markup;
-    }
-}
-
-
-function getItemMarkup(ctrl, obj)
-{
-    var id   = obj[ctrl.idProp];
-    var text = obj[ctrl.textProp];
-    var itemContent = ctrl.renderItemFn ? ctrl.renderItemFn(obj, id, text) : encodeHtml(text);
-
-    return "<li class='cs-mselect-item' data-id='" + id + "'><div class='cs-mselect-item-content'>" + itemContent + "</div><div class='cs-mselect-item-x'>x</div></li>";
 }

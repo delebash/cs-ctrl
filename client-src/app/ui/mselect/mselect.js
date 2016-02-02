@@ -4,10 +4,10 @@ export class Mselect
     {
         this.people = 
         [
-            {id: 1, text: "Adam"},
-            {id: 2, text: "Beth"},
-            {id: 3, text: "Carol"},
-            {id: 4, text: "John"}
+            {id: 1, text: "Adam",  sex: "m"},
+            {id: 2, text: "Beth",  sex: "f"},
+            {id: 3, text: "Carol", sex: "f"},
+            {id: 4, text: "John",  sex: "m"},
         ];
         
         this.selectedPeople = [this.people[1]];

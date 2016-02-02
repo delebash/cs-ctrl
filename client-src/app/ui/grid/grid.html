@@ -1,0 +1,8 @@
+<template>
+    
+    <cs-grid src.bind="rows" cs-grid.ref="grid" multiple>
+        <cs-col header="ID" sort="id">${i.id}</cs-col>
+        <cs-col header="Full Name">${i.firstname + ' ' + i.lastname}</cs-col>
+    </cs-grid>
+
+</template>

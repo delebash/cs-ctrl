@@ -29,13 +29,6 @@ export class Select
     }
     
     
-    renderPersonItem(obj, id, txt)
-    {
-        var color = obj.sex === "m" ? "blue" : "red";
-        return "<span style='color:" + color + "'>" + txt + "</span>";
-    }
-    
-    
     renderPersonResult(ddl, ctrl, obj, highlightedMarkup)
     {
         return highlightedMarkup;

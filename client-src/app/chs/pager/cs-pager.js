@@ -15,7 +15,6 @@ export class CsPager
     @bindable center    = true;  //Should current page be displayed in the center of visible ones?
     @bindable endLinks  = true;  //Display first/last page links?
     @bindable nextLinks = true;  //Display prev/next page links?
-    @bindable ondemand  = false; //Hide the pager if totalPages <= 1
     
     static inject = [Element];
     constructor(element)
@@ -29,6 +28,8 @@ export class CsPager
     //--------------------------------------------------------------------------------
     bind()
     {
+        this.ondemand = this.element.hasAttribute('ondemand'); //Hides pager if totalPages <= 1
+           
         this.buildPageLinks();
     }
     
